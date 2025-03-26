@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments - Student Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 1rem;
+        }
+        .unit-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .unit-card h3 {
+            margin-top: 0;
+        }
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+        .back-btn {
+            margin-bottom: 1rem;
+            background-color: #f1f1f1;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Assignments</h1>
+    </header>
+    <main>
+        <button class="back-btn" id="backBtn">Back to Features</button>
+        
+        <h2>Your Units</h2>
+        
+        <div class="unit-card" id="calculusCard">
+            <span class="badge" id="calculusBadge" style="display: none;">0</span>
+            <h3>Calculus</h3>
+            <p>View and submit your calculus assignments</p>
+            <button onclick="window.location.href='calculus-assignments.html'">View Assignments</button>
+        </div>
+        
+        <div class="unit-card" id="philosophyCard">
+            <span class="badge" id="philosophyBadge" style="display: none;">0</span>
+            <h3>Philosophy</h3>
+            <p>View and submit your philosophy assignments</p>
+            <button onclick="window.location.href='philosophy-assignments.html'">View Assignments</button>
+        </div>
+    </main>
+
+    <script src="../js/assignments.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</body>
+</html>

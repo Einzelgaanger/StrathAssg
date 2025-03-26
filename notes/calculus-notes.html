@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Notes - Student Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #2196F3;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 1rem;
+        }
+        .back-btn {
+            margin-bottom: 1rem;
+            background-color: #f1f1f1;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .note {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .note h3 {
+            margin-top: 0;
+        }
+        .note .date {
+            color: #666;
+            font-style: italic;
+        }
+        .admin-actions {
+            display: none;
+            margin-top: 1rem;
+        }
+        .admin-actions button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .admin-actions .edit-btn {
+            background-color: #2196F3;
+            color: white;
+            margin-right: 0.5rem;
+        }
+        .admin-actions .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .add-note {
+            margin-bottom: 2rem;
+        }
+        .add-note button {
+            background-color: #2196F3;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .form-container input, .form-container textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            padding: 0.5rem 1rem;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Calculus Notes</h1>
+    </header>
+    <main>
+        <button class="back-btn" id="backBtn">Back to Notes</button>
+        
+        <div id="adminControls">
+            <div class="add-note">
+                <button id="addNoteBtn">Add New Note</button>
+                <div class="form-container" id="noteForm">
+                    <h3>Add/Edit Note</h3>
+                    <input type="text" id="noteTitle" placeholder="Note Title" required>
+                    <textarea id="noteDesc" placeholder="Note Description" rows="4"></textarea>
+                    <input type="file" id="noteFile" required>
+                    <button id="saveNote">Save Note</button>
+                    <button id="cancelNote">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="notesList">
+            <!-- Notes will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <script src="../../js/notes.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</body>
+</html>

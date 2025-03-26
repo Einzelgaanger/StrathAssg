@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy Exams - Student Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #FF9800;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 1rem;
+        }
+        .back-btn {
+            margin-bottom: 1rem;
+            background-color: #f1f1f1;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .exam {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .exam h3 {
+            margin-top: 0;
+        }
+        .exam .date {
+            color: #666;
+            font-style: italic;
+        }
+        .admin-actions {
+            display: none;
+            margin-top: 1rem;
+        }
+        .admin-actions button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .admin-actions .edit-btn {
+            background-color: #FF9800;
+            color: white;
+            margin-right: 0.5rem;
+        }
+        .admin-actions .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .add-exam {
+            margin-bottom: 2rem;
+        }
+        .add-exam button {
+            background-color: #FF9800;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .form-container input, .form-container textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            padding: 0.5rem 1rem;
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Philosophy Exams</h1>
+    </header>
+    <main>
+        <button class="back-btn" id="backBtn">Back to Exams</button>
+        
+        <div id="adminControls">
+            <div class="add-exam">
+                <button id="addExamBtn">Add New Exam</button>
+                <div class="form-container" id="examForm">
+                    <h3>Add/Edit Exam</h3>
+                    <input type="text" id="examTitle" placeholder="Exam Title" required>
+                    <textarea id="examDesc" placeholder="Exam Description" rows="4"></textarea>
+                    <input type="file" id="examFile" required>
+                    <button id="saveExam">Save Exam</button>
+                    <button id="cancelExam">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="examsList">
+            <!-- Exams will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <script src="../../js/exams.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</body>
+</html>

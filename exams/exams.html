@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exams - Student Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #FF9800;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 1rem;
+        }
+        .unit-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .unit-card h3 {
+            margin-top: 0;
+        }
+        .back-btn {
+            margin-bottom: 1rem;
+            background-color: #f1f1f1;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Exams</h1>
+    </header>
+    <main>
+        <button class="back-btn" id="backBtn">Back to Features</button>
+        
+        <h2>Your Units</h2>
+        
+        <div class="unit-card">
+            <h3>Calculus</h3>
+            <p>View calculus exams and past papers</p>
+            <button onclick="window.location.href='calculus-exams.html'">View Exams</button>
+        </div>
+        
+        <div class="unit-card">
+            <h3>Philosophy</h3>
+            <p>View philosophy exams and past papers</p>
+            <button onclick="window.location.href='philosophy-exams.html'">View Exams</button>
+        </div>
+    </main>
+
+    <script src="../js/exams.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</body>
+</html>
