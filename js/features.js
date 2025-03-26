@@ -7,65 +7,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Display welcome message
+    // Display user information
     const user = JSON.parse(currentUser);
-    document.getElementById('welcomeText').textContent = `Welcome, ${user.name}`;
+    document.getElementById('userName').textContent = user.name;
     
-    // Tab navigation
-    const tabs = document.querySelectorAll('.nav-tab');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            // Remove active class from all tabs
-            tabs.forEach(t => t.classList.remove('active'));
-            // Add active class to clicked tab
-            this.classList.add('active');
-            
-            // Load appropriate content
-            const tabName = this.getAttribute('data-tab');
-            loadTabContent(tabName);
-        });
-    });
+    // Load motivational quotes
+    const quotes = [
+        "Education is the most powerful weapon which you can use to change the world. - Nelson Mandela",
+        "The beautiful thing about learning is that no one can take it away from you. - B.B. King",
+        "Success is no accident. It is hard work, perseverance, learning, studying, sacrifice and most of all, love of what you are doing. - Pelé",
+        "The expert in anything was once a beginner. - Helen Hayes",
+        "Don't let what you cannot do interfere with what you can do. - John Wooden"
+    ];
     
-    // Load initial tab (Assignments)
-    loadTabContent('assignments');
+    // Display random quote
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('motivationQuote').textContent = randomQuote;
 });
-
-function loadTabContent(tabName) {
-    const tabContent = document.getElementById('tabContent');
-    
-    switch(tabName) {
-        case 'assignments':
-            tabContent.innerHTML = `
-                <h3>Assignments</h3>
-                <p>Select a unit to view assignments:</p>
-                <ul>
-                    <li><a href="assignments/assignments.html">All Assignments</a></li>
-                    <li><a href="assignments/calculus-assignments.html">Calculus</a></li>
-                    <li><a href="assignments/philosophy-assignments.html">Philosophy</a></li>
-                </ul>
-            `;
-            break;
-        case 'notes':
-            tabContent.innerHTML = `
-                <h3>Notes</h3>
-                <p>Select a unit to view notes:</p>
-                <ul>
-                    <li><a href="notes/notes.html">All Notes</a></li>
-                    <li><a href="notes/calculus-notes.html">Calculus</a></li>
-                    <li><a href="notes/philosophy-notes.html">Philosophy</a></li>
-                </ul>
-            `;
-            break;
-        case 'exams':
-            tabContent.innerHTML = `
-                <h3>Exams</h3>
-                <p>Select a unit to view exam materials:</p>
-                <ul>
-                    <li><a href="exams/exams.html">All Exams</a></li>
-                    <li><a href="exams/calculus-exams.html">Calculus</a></li>
-                    <li><a href="exams/philosophy-exams.html">Philosophy</a></li>
-                </ul>
-            `;
-            break;
-    }
-}
