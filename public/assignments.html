@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Assignments</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        .back-btn {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        .container {
+            padding: 1rem;
+            padding-bottom: 70px;
+        }
+        .unit-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+            gap: 15px;
+        }
+        .unit-link {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .unit-link:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .unit-link i {
+            font-size: 1.1rem;
+        }
+        .assignment-list {
+            margin-top: 1rem;
+            text-align: center;
+            padding: 20px;
+        }
+        .nav-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .nav-item.active {
+            color: #4CAF50;
+        }
+        .nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+        .welcome-message {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            color: #555;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="features.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <h1>Assignments</h1>
+    </header>
+    
+    <div class="container">
+        <div class="welcome-message">
+            <p>Select a subject to view assignments</p>
+        </div>
+        
+        <div class="unit-selector">
+            <a href="calculus/assignments.html" class="unit-link">
+                <i class="fas fa-square-root-alt"></i>
+                Calculus
+            </a>
+            <a href="philosophy/assignments.html" class="unit-link">
+                <i class="fas fa-brain"></i>
+                Philosophy
+            </a>
+        </div>
+        
+        <div class="assignment-list">
+            <p>You'll see all assignments for the selected subject</p>
+        </div>
+    </div>
+    
+    <nav class="nav-bottom">
+        <a href="features.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="assignments.html" class="nav-item active">
+            <i class="fas fa-tasks"></i>
+            <span>Assignments</span>
+        </a>
+        <a href="notes.html" class="nav-item">
+            <i class="fas fa-book"></i>
+            <span>Notes</span>
+        </a>
+        <a href="exams.html" class="nav-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Exams</span>
+        </a>
+    </nav>
+
+    <script>
+        // Check if user is logged in
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = 'login.html';
+    } else {
+        console.log("Current session:", {
+            user: currentUser.name,
+            admin: currentUser.isAdmin,
+            lastLogin: new Date(currentUser.lastLogin).toLocaleString()
+        });
+        
+        // Update admin status if needed
+        if (currentUser.isAdmin) {
+            document.body.classList.add('admin');
+        }
+    }
+});
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

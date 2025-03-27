@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Calculus Assignments</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        .back-btn {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        .container {
+            padding: 1rem;
+            padding-bottom: 70px;
+        }
+        .assignment-list {
+            margin-top: 1rem;
+        }
+        .assignment-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .assignment-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .assignment-card p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .deadline {
+            font-weight: bold;
+        }
+        .deadline.overdue {
+            color: #f44336;
+        }
+        .deadline.completed {
+            color: #4CAF50;
+        }
+        .file-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .file-link i {
+            margin-right: 5px;
+        }
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        .btn-complete {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-pending {
+            background-color: #FFC107;
+            color: black;
+        }
+        .btn-edit, .btn-delete {
+            display: none;
+        }
+        .admin .btn-edit, .admin .btn-delete {
+            display: inline-block;
+        }
+        .btn-edit {
+            background-color: #2196F3;
+            color: white;
+        }
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        .add-assignment {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: none;
+            transition: all 0.2s;
+        }
+        .add-assignment:hover {
+            transform: scale(1.1);
+        }
+        .admin .add-assignment {
+            display: flex;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .modal h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .nav-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .nav-item.active {
+            color: #4CAF50;
+        }
+        .nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error-message {
+            color: #f44336;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <a href="../assignments.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <h1>Calculus Assignments</h1>
+    </header>
+    
+    <div class="container">
+        <div class="assignment-list" id="assignmentList">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading assignments...
+            </div>
+        </div>
+        
+        <div class="add-assignment" id="addAssignmentBtn">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+    
+    <!-- Add Assignment Modal -->
+    <div class="modal" id="assignmentModal">
+        <div class="modal-content">
+            <h2>Add New Calculus Assignment</h2>
+            <form id="assignmentForm">
+                <input type="hidden" id="assignmentUnit" value="calculus">
+                <div class="form-group">
+                    <label for="assignmentTitle">Title*</label>
+                    <input type="text" id="assignmentTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignmentDescription">Description</label>
+                    <textarea id="assignmentDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="assignmentDeadline">Deadline*</label>
+                    <input type="datetime-local" id="assignmentDeadline" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignmentFile">File (Optional)</label>
+                    <input type="file" id="assignmentFile" accept=".pdf,.doc,.docx,.jpg,.png">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-edit" id="cancelAssignmentBtn">Cancel</button>
+                    <button type="submit" class="btn btn-complete">Save Assignment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <nav class="nav-bottom">
+        <a href="../features.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="../assignments.html" class="nav-item active">
+            <i class="fas fa-tasks"></i>
+            <span>Assignments</span>
+        </a>
+        <a href="../notes.html" class="nav-item">
+            <i class="fas fa-book"></i>
+            <span>Notes</span>
+        </a>
+        <a href="../exams.html" class="nav-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Exams</span>
+        </a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Check if user is logged in
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = 'login.html';
+    } else {
+        console.log("Current session:", {
+            user: currentUser.name,
+            admin: currentUser.isAdmin,
+            lastLogin: new Date(currentUser.lastLogin).toLocaleString()
+        });
+        
+        // Update admin status if needed
+        if (currentUser.isAdmin) {
+            document.body.classList.add('admin');
+        }
+    }
+});
+    // Supabase setup
+    const supabaseUrl = 'https://gzscxqjotmdmnefsiqwf.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6c2N4cWpvdG1kbW5lZnNpcXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMDgxNzcsImV4cCI6MjA1ODU4NDE3N30.g0LLFDSNySfnpsvjNcRxDYYuragHW4WXgHKbet1tL4U';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // DOM elements
+    const assignmentList = document.getElementById('assignmentList');
+    const addAssignmentBtn = document.getElementById('addAssignmentBtn');
+    const assignmentModal = document.getElementById('assignmentModal');
+    const assignmentForm = document.getElementById('assignmentForm');
+    const cancelAssignmentBtn = document.getElementById('cancelAssignmentBtn');
+    
+    // Current user and state
+    let currentUser = null;
+    let isEditMode = false;
+    let currentEditId = null;
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', async () => {
+        await verifyUserSession();
+        setupEventListeners();
+        await loadAssignments();
+        
+        // Debug: Test Supabase connection
+        await testSupabaseConnection();
+    });
+
+    // ======================
+    // CORE FUNCTIONS
+    // ======================
+
+    async function verifyUserSession() {
+        currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        
+        if (!currentUser) {
+            window.location.href = '../login.html';
+            return;
+        }
+
+        console.log('Current user:', {
+            name: currentUser.name,
+            isAdmin: currentUser.isAdmin,
+            admission: currentUser.admission
+        });
+
+        if (currentUser.isAdmin) {
+            document.body.classList.add('admin');
+            console.log('Admin privileges activated');
+        }
+    }
+
+    async function testSupabaseConnection() {
+        try {
+            const { data, error } = await supabase
+                .from('assignments')
+                .select('id')
+                .limit(1);
+            
+            if (error) throw error;
+            console.log('Supabase connection test successful');
+        } catch (error) {
+            console.error('Supabase connection test failed:', error);
+            showErrorState('Database connection failed. Please refresh the page.');
+        }
+    }
+
+    function setupEventListeners() {
+        // Add assignment button
+        addAssignmentBtn.addEventListener('click', () => {
+            isEditMode = false;
+            currentEditId = null;
+            resetForm();
+            assignmentModal.style.display = 'flex';
+        });
+
+        // Cancel button
+        cancelAssignmentBtn.addEventListener('click', () => {
+            assignmentModal.style.display = 'none';
+            resetForm();
+        });
+
+        // Form submission
+        assignmentForm.addEventListener('submit', handleFormSubmit);
+
+        // Modal close when clicking outside
+        assignmentModal.addEventListener('click', (e) => {
+            if (e.target === assignmentModal) {
+                assignmentModal.style.display = 'none';
+                resetForm();
+            }
+        });
+    }
+
+    async function loadAssignments() {
+        try {
+            showLoadingState();
+            
+            const { data: assignments, error } = await supabase
+                .from('assignments')
+                .select('*')
+                .eq('unit', 'calculus')
+                .order('deadline', { ascending: true });
+
+            if (error) throw error;
+
+            if (!assignments || assignments.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            renderAssignments(assignments);
+        } catch (error) {
+            console.error('Error loading assignments:', error);
+            showErrorState(error.message);
+        }
+    }
+
+    // ======================
+    // RENDER FUNCTIONS
+    // ======================
+
+    function showLoadingState() {
+        assignmentList.innerHTML = `
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading assignments...
+                ${currentUser.isAdmin ? '<div><small>Admin mode active</small></div>' : ''}
+            </div>
+        `;
+    }
+
+    function showEmptyState() {
+        assignmentList.innerHTML = `
+            <div class="loading">
+                <i class="fas fa-info-circle"></i> No assignments found.
+                ${currentUser.isAdmin ? `
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-complete" onclick="document.getElementById('addAssignmentBtn').click()">
+                        <i class="fas fa-plus"></i> Create First Assignment
+                    </button>
+                </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    function showErrorState(message) {
+        assignmentList.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i> 
+                Failed to load assignments
+                <p><small>${message}</small></p>
+                <button class="btn btn-edit" onclick="location.reload()">
+                    <i class="fas fa-sync-alt"></i> Try Again
+                </button>
+                ${currentUser.isAdmin ? `
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-complete" onclick="document.getElementById('addAssignmentBtn').click()">
+                        <i class="fas fa-plus"></i> Add New Assignment
+                    </button>
+                </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    function renderAssignments(assignments) {
+        assignmentList.innerHTML = '';
+        
+        assignments.forEach(assignment => {
+            const dueDate = new Date(assignment.deadline);
+            const now = new Date();
+            const isOverdue = dueDate < now && !assignment.completed;
+            
+            const assignmentCard = document.createElement('div');
+            assignmentCard.className = 'assignment-card';
+            assignmentCard.dataset.id = assignment.id;
+            
+            assignmentCard.innerHTML = `
+                <h3>${assignment.title}</h3>
+                <p>${assignment.description || '<em>No description</em>'}</p>
+                <p class="deadline ${isOverdue ? 'overdue' : ''} ${assignment.completed ? 'completed' : ''}">
+                    <strong>Deadline:</strong> ${dueDate.toLocaleString()}
+                    ${isOverdue ? ' (Overdue)' : ''}
+                    ${assignment.completed ? ' (Completed)' : ''}
+                </p>
+                ${assignment.file_url ? `
+                    <a href="${assignment.file_url}" target="_blank" class="file-link">
+                        <i class="fas fa-file-download"></i> Download File
+                    </a>
+                ` : ''}
+                <div class="actions">
+                    <button class="btn ${assignment.completed ? 'btn-pending' : 'btn-complete'}" 
+                            onclick="toggleAssignmentStatus('${assignment.id}', ${assignment.completed})">
+                        <i class="fas fa-${assignment.completed ? 'undo' : 'check'}"></i>
+                        ${assignment.completed ? 'Mark as Pending' : 'Mark as Done'}
+                    </button>
+                    ${currentUser.isAdmin ? `
+                        <button class="btn btn-edit" onclick="editAssignment('${assignment.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-delete" onclick="deleteAssignment('${assignment.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            
+            assignmentList.appendChild(assignmentCard);
+        });
+    }
+
+    // ======================
+    // CRUD OPERATIONS
+    // ======================
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('assignmentTitle').value.trim();
+        const description = document.getElementById('assignmentDescription').value.trim();
+        const deadline = document.getElementById('assignmentDeadline').value;
+        const fileInput = document.getElementById('assignmentFile');
+        
+        if (!title || !deadline) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        try {
+            let fileUrl = null;
+            
+            // Handle file upload if exists
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const filePath = `assignments/calculus/${Date.now()}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage
+                    .from('materials')
+                    .upload(filePath, file);
+                
+                if (uploadError) throw uploadError;
+                
+                const { data: { publicUrl } } = supabase.storage
+                    .from('materials')
+                    .getPublicUrl(filePath);
+                
+                fileUrl = publicUrl;
+            }
+            
+            if (isEditMode && currentEditId) {
+                // Update existing assignment
+                const { error } = await supabase
+                    .from('assignments')
+                    .update({
+                        title,
+                        description,
+                        deadline,
+                        file_url: fileUrl,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', currentEditId);
+                
+                if (error) throw error;
+            } else {
+                // Create new assignment
+                const { error } = await supabase.from('assignments').insert([{
+                    unit: 'calculus',
+                    title,
+                    description,
+                    deadline,
+                    file_url: fileUrl,
+                    completed: false,
+                    created_at: new Date().toISOString()
+                }]);
+                
+                if (error) throw error;
+            }
+            
+            // Close modal and refresh
+            assignmentModal.style.display = 'none';
+            resetForm();
+            await loadAssignments();
+        } catch (error) {
+            console.error('Error saving assignment:', error);
+            alert(`Failed to save assignment: ${error.message}`);
+        }
+    }
+
+    window.toggleAssignmentStatus = async function(assignmentId, isCompleted) {
+        try {
+            const { error } = await supabase
+                .from('assignments')
+                .update({ completed: !isCompleted })
+                .eq('id', assignmentId);
+            
+            if (error) throw error;
+            
+            await loadAssignments();
+        } catch (error) {
+            console.error('Error updating assignment status:', error);
+            alert('Failed to update assignment status. Please try again.');
+        }
+    }
+
+    window.editAssignment = async function(assignmentId) {
+        try {
+            const { data: assignment, error } = await supabase
+                .from('assignments')
+                .select('*')
+                .eq('id', assignmentId)
+                .single();
+            
+            if (error) throw error;
+            
+            // Set edit mode
+            isEditMode = true;
+            currentEditId = assignmentId;
+            
+            // Populate form
+            document.querySelector('#assignmentModal h2').textContent = 'Edit Assignment';
+            document.getElementById('assignmentTitle').value = assignment.title;
+            document.getElementById('assignmentDescription').value = assignment.description || '';
+            document.getElementById('assignmentDeadline').value = assignment.deadline.slice(0, 16);
+            
+            // Show modal
+            assignmentModal.style.display = 'flex';
+        } catch (error) {
+            console.error('Error editing assignment:', error);
+            alert('Failed to load assignment details. Please try again.');
+        }
+    };
+
+    window.deleteAssignment = async function(assignmentId) {
+        if (!confirm('Are you sure you want to delete this assignment?\nThis action cannot be undone.')) {
+            return;
+        }
+        
+        try {
+            // First get assignment to check for file
+            const { data: assignment, error: fetchError } = await supabase
+                .from('assignments')
+                .select('file_url')
+                .eq('id', assignmentId)
+                .single();
+            
+            if (fetchError) throw fetchError;
+            
+            // Delete file if exists
+            if (assignment.file_url) {
+                const filePath = assignment.file_url.split('/materials/')[1];
+                await supabase.storage
+                    .from('materials')
+                    .remove([filePath]);
+            }
+            
+            // Delete assignment from database
+            const { error } = await supabase
+                .from('assignments')
+                .delete()
+                .eq('id', assignmentId);
+            
+            if (error) throw error;
+            
+            await loadAssignments();
+        } catch (error) {
+            console.error('Error deleting assignment:', error);
+            alert('Failed to delete assignment. Please try again.');
+        }
+    };
+
+    function resetForm() {
+        assignmentForm.reset();
+        document.querySelector('#assignmentModal h2').textContent = 'Add New Assignment';
+        isEditMode = false;
+        currentEditId = null;
+    }
+</script>
+</body>
+</html>
