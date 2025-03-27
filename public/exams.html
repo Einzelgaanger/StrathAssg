@@ -4,453 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal - Exams</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            position: relative;
+
+        .unit-card-animation {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
         }
-        .back-btn {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-        }
-        .container {
-            padding: 1rem;
-            padding-bottom: 70px;
-        }
-        .unit-selector {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        .unit-btn {
-            padding: 8px 16px;
-            margin: 0 5px;
-            background-color: #ddd;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .unit-btn.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .exams-list {
-            margin-top: 1rem;
-        }
+
+        .unit-card-animation:nth-child(1) { animation-delay: 0.1s; }
+        .unit-card-animation:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Exams-specific enhancements */
         .exam-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-bottom: 3px solid transparent;
         }
-        .exam-card h3 {
-            margin-top: 0;
-            color: #333;
+
+        .exam-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-bottom-color: #8b5cf6; /* Purple accent */
         }
-        .exam-card p {
-            color: #666;
-            margin: 5px 0;
+
+        .exam-icon {
+            transition: transform 0.3s ease;
         }
-        .file-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #2196F3;
-            text-decoration: none;
+
+        .exam-card:hover .exam-icon {
+            transform: scale(1.1);
         }
-        .file-link i {
-            margin-right: 5px;
-        }
-        .btn-delete {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            background-color: #f44336;
+
+        .count-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #8b5cf6;
             color: white;
-            margin-top: 10px;
-            display: none;
-        }
-        .admin .btn-delete {
-            display: inline-block;
-        }
-        .add-exam {
-            position: fixed;
-            bottom: 70px;
-            right: 20px;
-            background-color: #4CAF50;
-            color: white;
-            width: 50px;
-            height: 50px;
             border-radius: 50%;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            display: none;
-        }
-        .admin .add-exam {
-            display: flex;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-        }
-        .modal h2 {
-            margin-top: 0;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
+            font-size: 0.75rem;
             font-weight: bold;
         }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .nav-bottom {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            background-color: white;
-            padding: 0.5rem 0;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #666;
-            font-size: 0.8rem;
-        }
-        .nav-item.active {
-            color: #4CAF50;
-        }
-        .nav-item i {
-            font-size: 1.5rem;
-            margin-bottom: 0.3rem;
-        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
-<body>
-    <header>
-        <a href="features.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
-        <h1>Exams</h1>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <!-- Top Header -->
+    <header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 shadow-md relative">
+        <div class="container mx-auto px-4 flex items-center justify-center">
+            <a href="features.html" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-colors">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+            <h1 class="text-xl font-bold tracking-tight">Exam Resources</h1>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                <button id="addExamBtn" class="hidden admin bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all">
+                    <i class="fas fa-plus text-sm"></i>
+                </button>
+            </div>
+        </div>
     </header>
-    
-    <div class="container">
-        <div class="unit-selector">
-            <button class="unit-btn active" data-unit="all">All</button>
-            <button class="unit-btn" data-unit="calculus">Calculus</button>
-            <button class="unit-btn" data-unit="philosophy">Philosophy</button>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="welcome-message text-center mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">Exam Preparation</h2>
+            <p class="text-gray-600">Select a subject to access past papers and study materials</p>
         </div>
         
-        <div class="exams-list" id="examsList">
-            <!-- Exams will be loaded here -->
+        <div class="grid md:grid-cols-2 gap-6 max-w-xl mx-auto">
+            <!-- Calculus Exam Card -->
+            <div class="unit-card-animation">
+                <a href="calculus/exams.html" class="block relative">
+                    <div class="exam-card bg-white rounded-xl shadow-md p-6 text-center cursor-pointer flex flex-col items-center">
+                        <div class="exam-icon text-4xl text-blue-600 mb-4 relative">
+                            <i class="fas fa-square-root-alt"></i>
+                            <div class="count-badge" id="calculusExamCount">0</div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Calculus</h3>
+                        <p class="text-gray-500 text-sm">Past papers & solutions</p>
+                        <div class="mt-4 text-xs text-purple-600 font-medium">
+                            <i class="fas fa-clock mr-1"></i> Updated 2 days ago
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Philosophy Exam Card -->
+            <div class="unit-card-animation">
+                <a href="philosophy/exams.html" class="block relative">
+                    <div class="exam-card bg-white rounded-xl shadow-md p-6 text-center cursor-pointer flex flex-col items-center">
+                        <div class="exam-icon text-4xl text-green-600 mb-4 relative">
+                            <i class="fas fa-brain"></i>
+                            <div class="count-badge" id="philosophyExamCount">0</div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Philosophy</h3>
+                        <p class="text-gray-500 text-sm">Essay questions & rubrics</p>
+                        <div class="mt-4 text-xs text-purple-600 font-medium">
+                            <i class="fas fa-clock mr-1"></i> Updated 1 week ago
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
-        
-        <div class="add-exam" id="addExamBtn">
-            <i class="fas fa-plus"></i>
+
+        <!-- Upcoming Exams Section -->
+        <div class="max-w-3xl mx-auto mt-12">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-calendar-alt text-purple-600 mr-2"></i>
+                Upcoming Exams
+            </h3>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-500">Your upcoming exam schedule will appear here</p>
+                <!-- Dynamic content would go here -->
+            </div>
         </div>
-    </div>
-    
-    <!-- Add Exam Modal -->
-    <div class="modal" id="examModal">
-        <div class="modal-content">
-            <h2>Add New Exam</h2>
-            <form id="examForm">
-                <div class="form-group">
-                    <label for="examUnit">Unit</label>
-                    <select id="examUnit" required>
-                        <option value="calculus">Calculus</option>
-                        <option value="philosophy">Philosophy</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="examTitle">Title</label>
-                    <input type="text" id="examTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="examFile">File</label>
-                    <input type="file" id="examFile" required>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-edit" id="cancelExamBtn">Cancel</button>
-                    <button type="submit" class="btn btn-complete">Save</button>
-                </div>
-            </form>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t border-gray-100">
+        <div class="grid grid-cols-4 text-center">
+            <a href="features.html" class="nav-item text-gray-500 hover:text-purple-600 py-3 hover:bg-gray-50 transition-colors">
+                <i class="fas fa-home block text-xl mb-1"></i>
+                <span class="text-xs">Home</span>
+            </a>
+            <a href="assignments.html" class="nav-item text-gray-500 hover:text-purple-600 py-3 hover:bg-gray-50 transition-colors">
+                <i class="fas fa-tasks block text-xl mb-1"></i>
+                <span class="text-xs">Assignments</span>
+            </a>
+            <a href="notes.html" class="nav-item text-gray-500 hover:text-purple-600 py-3 hover:bg-gray-50 transition-colors">
+                <i class="fas fa-book block text-xl mb-1"></i>
+                <span class="text-xs">Notes</span>
+            </a>
+            <a href="exams.html" class="nav-item text-purple-600 py-3 bg-purple-50 transition-colors">
+                <i class="fas fa-file-alt block text-xl mb-1"></i>
+                <span class="text-xs">Exams</span>
+            </a>
         </div>
-    </div>
-    
-    <nav class="nav-bottom">
-        <a href="features.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="assignments.html" class="nav-item">
-            <i class="fas fa-tasks"></i>
-            <span>Assignments</span>
-        </a>
-        <a href="notes.html" class="nav-item">
-            <i class="fas fa-book"></i>
-            <span>Notes</span>
-        </a>
-        <a href="exams.html" class="nav-item active">
-            <i class="fas fa-file-alt"></i>
-            <span>Exams</span>
-        </a>
     </nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-    // Check if user is logged in
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        window.location.href = 'login.html';
-    } else {
-        console.log("Current session:", {
-            user: currentUser.name,
-            admin: currentUser.isAdmin,
-            lastLogin: new Date(currentUser.lastLogin).toLocaleString()
-        });
-        
-        // Update admin status if needed
-        if (currentUser.isAdmin) {
-            document.body.classList.add('admin');
-        }
-    }
-});
-        // Supabase setup
-        const supabaseUrl = 'https://gzscxqjotmdmnefsiqwf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6c2N4cWpvdG1kbW5lZnNpcXdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMDgxNzcsImV4cCI6MjA1ODU4NDE3N30.g0LLFDSNySfnpsvjNcRxDYYuragHW4WXgHKbet1tL4U';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-        
         // Check if user is logged in
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        } else {
-            // Add admin class to body if user is admin
-            if (currentUser.isAdmin) {
-                document.body.classList.add('admin');
-            }
-        }
-        
-        // DOM elements
-        const examsList = document.getElementById('examsList');
-        const unitButtons = document.querySelectorAll('.unit-btn');
-        const addExamBtn = document.getElementById('addExamBtn');
-        const examModal = document.getElementById('examModal');
-        const examForm = document.getElementById('examForm');
-        const cancelExamBtn = document.getElementById('cancelExamBtn');
-        
-        // Current selected unit
-        let currentUnit = 'all';
-        
-        // Load exams
-        async function loadExams() {
-            try {
-                let query = supabase.from('exams').select('*');
-                
-                if (currentUnit !== 'all') {
-                    query = query.eq('unit', currentUnit);
-                }
-                
-                const { data: exams, error } = await query;
-                
-                if (error) throw error;
-                
-                examsList.innerHTML = '';
-                
-                if (exams.length === 0) {
-                    examsList.innerHTML = '<p>No exams found.</p>';
-                    return;
-                }
-                
-                exams.forEach(exam => {
-                    const examCard = document.createElement('div');
-                    examCard.className = 'exam-card';
-                    examCard.dataset.id = exam.id;
-                    
-                    let deleteBtn = '';
-                    if (currentUser.isAdmin) {
-                        deleteBtn = `<button class="btn-delete" onclick="deleteExam('${exam.id}')">Delete</button>`;
-                    }
-                    
-                    examCard.innerHTML = `
-                        <h3>${exam.title}</h3>
-                        <p><strong>Unit:</strong> ${exam.unit.charAt(0).toUpperCase() + exam.unit.slice(1)}</p>
-                        <a href="${exam.file_url}" target="_blank" class="file-link">
-                            <i class="fas fa-file-download"></i> Download Exam
-                        </a>
-                        ${deleteBtn}
-                    `;
-                    
-                    examsList.appendChild(examCard);
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            } else {
+                console.log("Current session:", {
+                    user: currentUser.name,
+                    admin: currentUser.isAdmin,
+                    lastLogin: new Date(currentUser.lastLogin).toLocaleString()
                 });
-            } catch (error) {
-                console.error('Error loading exams:', error);
-                examsList.innerHTML = '<p>Error loading exams. Please try again.</p>';
-            }
-        }
-        
-        // Unit selection
-        unitButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                unitButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                currentUnit = button.dataset.unit;
-                loadExams();
-            });
-        });
-        
-        // Add exam modal
-        addExamBtn.addEventListener('click', () => {
-            examModal.style.display = 'flex';
-        });
-        
-        cancelExamBtn.addEventListener('click', () => {
-            examModal.style.display = 'none';
-            examForm.reset();
-        });
-        
-        // Submit exam form
-        examForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const unit = document.getElementById('examUnit').value;
-            const title = document.getElementById('examTitle').value;
-            const fileInput = document.getElementById('examFile');
-            
-            if (fileInput.files.length === 0) {
-                alert('Please select a file to upload');
-                return;
-            }
-            
-            try {
-                const file = fileInput.files[0];
-                const filePath = `exams/${unit}/${Date.now()}_${file.name}`;
                 
-                // Upload file
-                const { error: uploadError } = await supabase.storage
-                    .from('materials')
-                    .upload(filePath, file);
-                
-                if (uploadError) throw uploadError;
-                
-                // Get public URL
-                const { data: { publicUrl } } = supabase.storage
-                    .from('materials')
-                    .getPublicUrl(filePath);
-                
-                // Insert exam into database
-                const { error } = await supabase.from('exams').insert([{
-                    unit,
-                    title,
-                    file_url: publicUrl,
-                    created_at: new Date().toISOString()
-                }]);
-                
-                if (error) throw error;
-                
-                // Close modal and refresh list
-                examModal.style.display = 'none';
-                examForm.reset();
-                loadExams();
-            } catch (error) {
-                console.error('Error adding exam:', error);
-                alert('Failed to add exam. Please try again.');
-            }
-        });
-        
-        // Delete exam
-        async function deleteExam(examId) {
-            if (confirm('Are you sure you want to delete this exam?')) {
-                try {
-                    // First get the exam to get the file path
-                    const { data: exam, error: fetchError } = await supabase.from('exams')
-                        .select('*')
-                        .eq('id', examId)
-                        .single();
-                    
-                    if (fetchError) throw fetchError;
-                    
-                    // Delete from storage if file exists
-                    if (exam.file_url) {
-                        const filePath = exam.file_url.split('/materials/')[1];
-                        const { error: deleteError } = await supabase.storage
-                            .from('materials')
-                            .remove([filePath]);
-                        
-                        if (deleteError) throw deleteError;
-                    }
-                    
-                    // Delete from database
-                    const { error } = await supabase.from('exams')
-                        .delete()
-                        .eq('id', examId);
-                    
-                    if (error) throw error;
-                    
-                    loadExams();
-                } catch (error) {
-                    console.error('Error deleting exam:', error);
-                    alert('Failed to delete exam. Please try again.');
+                // Update admin status if needed
+                if (currentUser.isAdmin) {
+                    document.body.classList.add('admin');
+                    document.getElementById('addExamBtn').classList.remove('hidden');
                 }
+
+                // Simulate exam counts (replace with actual data from your database)
+                setTimeout(() => {
+                    document.getElementById('calculusExamCount').textContent = '5';
+                    document.getElementById('philosophyExamCount').textContent = '3';
+                }, 500);
             }
-        }
-        
-        // Initial load
-        loadExams();
+        });
+
+        // Add exam button functionality for admins
+        document.getElementById('addExamBtn')?.addEventListener('click', function() {
+            // This would open a modal or redirect to an exam creation page
+            alert('Admin: Add new exam resource functionality would go here');
+        });
     </script>
 </body>
 </html>

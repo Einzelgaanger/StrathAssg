@@ -19,70 +19,132 @@
 
         .unit-card-animation:nth-child(1) { animation-delay: 0.1s; }
         .unit-card-animation:nth-child(2) { animation-delay: 0.2s; }
+
+        /* Assignments-specific enhancements */
+        .assignment-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-right: 3px solid transparent;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-right-color: #8b5cf6; /* Purple accent */
+        }
+
+        .assignment-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .assignment-card:hover .assignment-icon {
+            transform: scale(1.1);
+        }
+
+        .urgent-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Top Header -->
-    <header class="bg-purple-600 text-white py-4 shadow-md relative">
+    <header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 shadow-md relative">
         <div class="container mx-auto px-4 flex items-center justify-center">
-            <a href="features.html" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-200">
+            <a href="features.html" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-colors">
                 <i class="fas fa-arrow-left text-xl"></i>
             </a>
-            <h1 class="text-xl font-bold">Assignments</h1>
+            <h1 class="text-xl font-bold tracking-tight">Course Assignments</h1>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                <button id="addAssignmentBtn" class="hidden admin bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all">
+                    <i class="fas fa-plus text-sm"></i>
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 py-8">
         <div class="welcome-message text-center mb-8">
-            <p class="text-gray-600 text-lg">Select a subject to view assignments</p>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">Your Assignments</h2>
+            <p class="text-gray-600">Select a subject to view and manage tasks</p>
         </div>
         
         <div class="grid md:grid-cols-2 gap-6 max-w-xl mx-auto">
+            <!-- Calculus Assignment Card -->
             <div class="unit-card-animation">
-                <a href="calculus/assignments.html" class="block">
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center cursor-pointer hover:scale-105 flex items-center justify-center space-x-4">
-                        <div class="text-4xl text-blue-600">
+                <a href="calculus/assignments.html" class="block relative">
+                    <div class="assignment-card bg-white rounded-xl shadow-md p-6 text-center cursor-pointer flex flex-col items-center">
+                        <div class="assignment-icon text-4xl text-blue-600 mb-4 relative">
                             <i class="fas fa-square-root-alt"></i>
+                            <div class="urgent-badge" id="calculusUrgentCount">2</div>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Calculus</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Calculus</h3>
+                        <p class="text-gray-500 text-sm">Problem sets & exercises</p>
+                        <div class="mt-4 text-xs text-purple-600 font-medium">
+                            <span id="calculusAssignmentCount">5</span> active assignments
+                        </div>
                     </div>
                 </a>
             </div>
             
+            <!-- Philosophy Assignment Card -->
             <div class="unit-card-animation">
-                <a href="philosophy/assignments.html" class="block">
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center cursor-pointer hover:scale-105 flex items-center justify-center space-x-4">
-                        <div class="text-4xl text-green-600">
+                <a href="philosophy/assignments.html" class="block relative">
+                    <div class="assignment-card bg-white rounded-xl shadow-md p-6 text-center cursor-pointer flex flex-col items-center">
+                        <div class="assignment-icon text-4xl text-green-600 mb-4 relative">
                             <i class="fas fa-brain"></i>
+                            <div class="urgent-badge" id="philosophyUrgentCount">1</div>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-800">Philosophy</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Philosophy</h3>
+                        <p class="text-gray-500 text-sm">Reading responses & essays</p>
+                        <div class="mt-4 text-xs text-purple-600 font-medium">
+                            <span id="philosophyAssignmentCount">3</span> active assignments
+                        </div>
                     </div>
                 </a>
             </div>
         </div>
 
-        <div class="assignment-list text-center mt-8">
-            <p class="text-gray-500">Select a subject to view its assignments</p>
+        <!-- Recent Assignments Section -->
+        <div class="max-w-3xl mx-auto mt-12">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-exclamation-circle text-purple-600 mr-2"></i>
+                Upcoming Deadlines
+            </h3>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-500">Your nearest deadlines will appear here</p>
+                <!-- Dynamic content would go here -->
+            </div>
         </div>
     </main>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t border-gray-100">
         <div class="grid grid-cols-4 text-center">
-            <a href="features.html" class="nav-item text-gray-600 py-3 hover:bg-gray-50 transition">
+            <a href="features.html" class="nav-item text-gray-500 hover:text-purple-600 py-3 hover:bg-gray-50 transition-colors">
                 <i class="fas fa-home block text-xl mb-1"></i>
                 <span class="text-xs">Home</span>
             </a>
-            <a href="assignments.html" class="nav-item text-purple-600 py-3 hover:bg-purple-50 transition">
+            <a href="assignments.html" class="nav-item text-purple-600 py-3 bg-purple-50 transition-colors">
                 <i class="fas fa-tasks block text-xl mb-1"></i>
                 <span class="text-xs">Assignments</span>
             </a>
-            <a href="notes.html" class="nav-item text-gray-600 py-3 hover:bg-gray-50 transition">
+            <a href="notes.html" class="nav-item text-gray-500 hover:text-purple-600 py-3 hover:bg-gray-50 transition-colors">
                 <i class="fas fa-book block text-xl mb-1"></i>
                 <span class="text-xs">Notes</span>
             </a>
-            <a href="exams.html" class="nav-item text-gray-600 py-3 hover:bg-gray-50 transition">
+            <a href="exams.html" class="nav-item text-gray-500 hover:text-purple-600 py-3 hover:bg-gray-50 transition-colors">
                 <i class="fas fa-file-alt block text-xl mb-1"></i>
                 <span class="text-xs">Exams</span>
             </a>
@@ -105,8 +167,23 @@
                 // Update admin status if needed
                 if (currentUser.isAdmin) {
                     document.body.classList.add('admin');
+                    document.getElementById('addAssignmentBtn').classList.remove('hidden');
                 }
+
+                // Simulate assignment counts (replace with actual data from your database)
+                setTimeout(() => {
+                    document.getElementById('calculusAssignmentCount').textContent = '5';
+                    document.getElementById('philosophyAssignmentCount').textContent = '3';
+                    document.getElementById('calculusUrgentCount').textContent = '2';
+                    document.getElementById('philosophyUrgentCount').textContent = '1';
+                }, 500);
             }
+        });
+
+        // Add assignment button functionality for admins
+        document.getElementById('addAssignmentBtn')?.addEventListener('click', function() {
+            // This would open a modal or redirect to an assignment creation page
+            alert('Admin: Add new assignment functionality would go here');
         });
     </script>
 </body>
